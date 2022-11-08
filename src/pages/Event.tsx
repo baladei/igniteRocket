@@ -1,6 +1,6 @@
 import { Header } from "../components/Header";
-import { Player } from "../components/Player";
 import { Sidebar } from "../components/Sidebar";
+import { testando } from "../components/Player";
 
 export function Event () {
     return (
