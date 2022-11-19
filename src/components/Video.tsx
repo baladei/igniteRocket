@@ -1,14 +1,61 @@
 import { CaretRight, DiscordLogo, FileArrowDown, Lightning } from "phosphor-react";
 import '@vime/core/themes/default.css';
 import { Youtube, DefaultUi, Player } from "@vime/react";
+import { gql, useQuery } from "@apollo/client";
 
-export function Video () {
+interface VideoProps {
+    lessonSlug: string;
+}
+
+interface getLessonBySlugResponse {
+    lesson: {
+        title: string;
+        videoId: string;
+        description: string;
+        teacher: {
+            bio: string;
+            avatarURL: string;
+            name: string;
+        }
+    }
+}
+
+const GET_LESSON_BY_SLUG_QUERY = gql `
+query getLessonBySlug ($slug: String) {
+  lesson(where: {slug: $slug}) {
+    title
+    videoId
+    description
+    teacher {
+      avatarURL
+      bio
+      name
+    }
+  }
+}
+`
+
+export function Video (props: VideoProps) {
+    const { data } = useQuery<getLessonBySlugResponse>(GET_LESSON_BY_SLUG_QUERY, {
+        variables: {
+            slug: props.lessonSlug,
+        }
+    })
+
+if (!data) {
+    return (
+        <div className="flex-1">
+            <p>Carregando...</p>
+        </div>
+    )
+}
+
     return (
         <div className="flex-1">
             <div className="bg-black flex justify-center">
                 <div className="h-full w-full max-w-[1100px] max-h-[60vh] aspect-video">
                     <Player>
-                    <Youtube videoId="_mB-TShMDvY" />
+                    <Youtube videoId={data.lesson.videoId} />
                     <DefaultUi />
                     </Player>
                 </div>
@@ -18,23 +65,23 @@ export function Video () {
                 <div className="flex items-start gap-16">
                     <div className="flex-1">
                         <h1 className="text-2xl font-bold">
-                             Aula 04 - Git e GitHub
+                        {data.lesson.title}
                         </h1>
 
                     <p className="mt-4 text-gray-200 leading-relaxed">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid ad quia quod vero eos minus ut rerum sapiente consectetur, facere non quidem totam dolore animi officiis nam, voluptas ipsa mollitia?Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse doloribus expedita at cumque, accusantium sed voluptatibus. Vel, id soluta esse neque magnam rem quia excepturi deleniti itaque temporibus molestiae iste?Lorem ipsum dolor sit amet consectetur adipisicing elit. In perspiciatis sed quae aliquam ducimus unde vero ipsa cupiditate molestiae suscipit soluta harum quos provident facere sapiente placeat, velit veniam nihil!                    
-                    </p>
+                    {data.lesson.description}
+/                   </p>
 
                     <div className="flex itens-center gap-4 mt-6">
                         <img
                             className="h-16 w-16 rounded-full border-2 border-blue-500"
-                            src="https://github.com/baladei.png"
+                            src={data.lesson.teacher.avatarURL}
                             alt=""
                          />
 
                         <div className="leading-relaxed">
-                            <strong className="font-bold text-2xl block">Fernando Baladei</strong>
-                            <span className="text-gray-200 text-sm block">Student of front-end development!</span>
+                            <strong className="font-bold text-2xl block">{data.lesson.teacher.name}</strong>
+                            <span className="text-gray-200 text-sm block">{data.lesson.teacher.bio}</span>
                         </div>
                     </div>
                 </div>
@@ -79,7 +126,7 @@ export function Video () {
                             </p>                            
                         </div>
                         <div className="h-full p-6 flex items-center">
-                            <CaretRight size={24}/>                             
+                            <CaretRight size={24} />                             
                         </div>
                     </a>
 
