@@ -1,7 +1,7 @@
 import { CaretRight, DiscordLogo, FileArrowDown, Lightning } from "phosphor-react";
-import '@vime/core/themes/default.css';
 import { Youtube, DefaultUi, Player } from "@vime/react";
 import { gql, useQuery } from "@apollo/client";
+import '@vime/core/themes/default.css';
 
 interface VideoProps {
     lessonSlug: string;

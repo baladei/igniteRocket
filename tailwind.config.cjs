@@ -5,6 +5,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+
+      backgroundImage: {
+        home: 'url(/src/assets/myBackground.png)'
+      },
       
       fontFamily: {
         sans: 'Roboto, sans-serif'
