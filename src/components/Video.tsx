@@ -12,7 +12,7 @@ interface getLessonBySlugResponse {
         title: string;
         videoId: string;
         description: string;
-        teacher: {
+        teacher?: {
             bio: string;
             avatarURL: string;
             name: string;
@@ -75,13 +75,13 @@ if (!data) {
                     <div className="flex itens-center gap-4 mt-6">
                         <img
                             className="h-16 w-16 rounded-full border-2 border-blue-500"
-                            src={data.lesson.teacher.avatarURL}
+                            src={data?.lesson.teacher?.avatarURL}
                             alt=""
                          />
 
                         <div className="leading-relaxed">
-                            <strong className="font-bold text-2xl block">{data.lesson.teacher.name}</strong>
-                            <span className="text-gray-200 text-sm block">{data.lesson.teacher.bio}</span>
+                            <strong className="font-bold text-2xl block">{data.lesson.teacher?.name}</strong>
+                            <span className="text-gray-200 text-sm block">{data.lesson.teacher?.bio}</span>
                         </div>
                     </div>
                 </div>
